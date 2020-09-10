@@ -2,6 +2,9 @@
 <html>
 	<body>
 	<head>
+		<title>API Explorer</title>
+		<!-- https://favicon.io/favicon-generator/ -->
+		<link rel="icon" href="favicon1.ico">
 		<style>
         body {
             position: relative;
@@ -73,6 +76,7 @@
 			<br>
 			<br>
 			<button class = "buttonclass" id = "authAndLoadButton" onclick="authAndLoad()">Authorize & Load</button>
+			<button class = "buttonclass" id = "test" onclick="opn()">Popup</button
 		</div>
 		<br>
 		<br>
@@ -81,6 +85,10 @@
 			<a id="googAuthResponseURL"></a>
 		</div>
 		<script>
+
+			function opn(){
+				window.open('https://javascript.info/');
+			}
 			
 			let div = document.getElementById("fetchUpdateDiv");
 			let body = {};
