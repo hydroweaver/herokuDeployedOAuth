@@ -1,0 +1,73 @@
+<!-- BASIC GOOGLE SIGN IN BUTTON, NOT AUTHORIZE, REMEMBER THIS, THIS IS CAUSING A WHOLE LOT OF CONFUSION
+SUCH AS WHY DID I IMPLEMENT NODE JS IF THIS WAS THERE?
+OR, HOW DOES THIS FIT INTO OAUTH ???
+
+MAIN CONFUSION WAS ON WHY I IMPLEMENT NODE JS GAPI CLIENT ON A SERVER, WHEN A SIMPLE BUTTON CAN DO THE TRICK! WELL, FIRST
+I WAS IGNORANT, SECOND, DESIGN DECISION FOR IMPLEMENTING IT!
+
+FORGET IT AND GO AHEAD WITH WHAT WE HAVE, DUMB CLIENT CALLING SERVER POST GOOGLE AUTHORIZATION
+WE WILL DEAL WITH SIGN IN WHEN WE ARE MAKING NEW USERS
+MORE IMPORTANTLY OAUTH ITSELF IS A SUPERSET OF SIGN IN SINCE SIGN IN IS REQD FOR USR TO PROVIDE AUTH-->
+<!-- THIS ANSWER IS GREAT : https://stackoverflow.com/questions/33702826/oauth-authorization-vs-authentication#:~:text=OAuth%20is%20a%20specification%20for,authorization%2C%20but%20NOT%20for%20authentication.&text=The%20authorization%20endpoint%20is%20used,identity%20of%20the%20resource%20owner. -->
+<!-- https://developers.google.com/identity/sign-in/web/sign-in -->
+
+
+<!-- THIS IS ANOTHER WAY OF MAKING A CUSTOM CLIENT SIDE BUTTON, KIND OF SAME AS ABOVE -->
+<!-- https://developers.google.com/identity/sign-in/web/build-button -->
+<!-- https://developers.google.com/identity/sign-in/web -->
+
+<!-- REMEMBER TO USE python -m SimpleHTTPServer TO RUN THESE ! -->
+
+
+<!-- <html>
+<head>
+  <meta name="google-signin-client_id" content="501222631724-mrm826pl71bij3pdirl13vps5nt3h7de.apps.googleusercontent.com">
+</head>
+<body>
+  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</body>
+</html> -->
+
+<html>
+<head>
+  <meta name="google-signin-client_id" content="501222631724-mrm826pl71bij3pdirl13vps5nt3h7de.apps.googleusercontent.com">
+</head>
+<body>
+  <div id="my-signin2"></div>
+  <script>
+    function onSuccess(googleUser) {
+      console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); // This is null if the 'email'
+
+      console.log(profile);
+
+      gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+
+    }
+    function onFailure(error) {
+      console.log(error);
+    }
+    function renderButton() {
+      gapi.signin2.render('my-signin2', {
+        'scope': 'profile email',
+        'width': 240,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': onSuccess,
+        'onfailure': onFailure
+      });
+    }
+  </script>
+
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+</body>
+</html>
