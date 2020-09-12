@@ -2,6 +2,8 @@ const {google} = require('googleapis');
 const express = require('express');
 const cors = require('cors');
 
+require('dotenv').config();
+
 var apiKey;
 var clientID;
 var clientSecret;
@@ -61,6 +63,8 @@ app.get('/dat', (req, res)=>{
     res.render("template", {data: {name: req.query.title, pic: req.query.img}});
 }).listen(process.env.PORT || 8888);
 
+//Removing post method, API Explorer kind of functionality can be shown in some tutorial
+// oauth2Client would be set when user clicks on auth button on page
 app.post('/', (req, res)=>{
     oauth2Client.apiKey = req.body.key;
     oauth2Client._clientId = req.body.id;
