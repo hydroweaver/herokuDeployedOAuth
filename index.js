@@ -37,7 +37,7 @@ let authUserChannelCall = {
 
 const app = express();
 app.use(cors({credentials: true, origin: true}));
-app.use(express.static('images'));
+app.use(express.static(__dirname));
 app.use(express.json());
 app.set("view engine","ejs");
 
