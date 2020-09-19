@@ -15,15 +15,24 @@ const oauth2Client = new google.auth.OAuth2(
     'https://afternoon-tor-58445.herokuapp.com/oauthcallback'
   );
 
+  oauth2Client.apiKey = process.env.apiKey;
+  oauth2Client._clientId = process.env.clientID;
+  oauth2Client._clientSecret = process.env.clientsecret;
+
+  const scopes = [
+    'https://www.googleapis.com/auth/youtube.readonly',
+    ];
+
+const url = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: scopes
+});
+
 const youtube = google.youtube({
     version: 'v3',
     //auth needs to change to oauth2Client when you need to Oauth to work, not APIKEY
     auth: oauth2Client,
   });
-
-  const scopes = [
-    'https://www.googleapis.com/auth/youtube.readonly',
-  ];
 
 let publicChannelCall = {
     "part" : "snippet,contentDetails",
@@ -36,14 +45,14 @@ let authUserChannelCall = {
 };
 
 const app = express();
-app.use(cors({credentials: true, origin: true}));
-app.use(express.static(__dirname));
+app.use(cors({credentials: true, origin: true}));;
+app.use(express.static('images'));
 app.use(express.json());
 app.set("view engine","ejs");
 
 app.get('/', (req, res)=>{
-    res.sendFile(__dirname + '/index.html');
-    // res.send('Welcome to the app, this is a GET / response');
+    res.render("indexTemplate", {oauthurl: url});
+    // res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/oauthcallback', async (req, res)=>{
@@ -62,18 +71,6 @@ app.get('/oauthcallback', async (req, res)=>{
 
 app.get('/dat', (req, res)=>{
     res.render("template", {data: {name: req.query.title, pic: req.query.img}});
-}).listen(process.env.PORT || 8888);
+}).listen(process.env.PORT || 8000);
 
-//Removing post method, API Explorer kind of functionality can be shown in some tutorial
-// oauth2Client would be set when user clicks on auth button on page
-app.post('/', (req, res)=>{
-    oauth2Client.apiKey = req.body.key;
-    oauth2Client._clientId = req.body.id;
-    oauth2Client._clientSecret = req.body.secret;
 
-    const url = oauth2Client.generateAuthUrl({
-            access_type: 'offline',
-            scope: scopes
-        });
-    res.send(url);
-});
